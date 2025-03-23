@@ -1,6 +1,6 @@
 # ElevenLabs Scribe Longform Transcriber
 
-A web application that transcribes long-form audio files using the ElevenLabs Scribe API. It automatically splits audio files into segments, transcribes each segment, and combines the transcripts with speaker detection.
+A web application that transcribes long-form audio files using the ElevenLabs Scribe API. It automatically splits audio files into segments, transcribes each segment, and combines the transcripts with speaker detection. This gets around the API transcription limitation of 8 minutes.
 
 ## Disclaimer
 
@@ -24,7 +24,7 @@ If you find it valuable, feel free donate a little something to me here: [PayPal
 
 - Python 3.7+
 - Flask
-- An ElevenLabs API key with Scribe access (obtain from [elevenlabs.io](https://elevenlabs.io))
+- An ElevenLabs API key with Scribe access (obtain from [elevenlabs.io](https://elevenlabs.io/app/settings/api-keys))
 - Required Python libraries: See requirements below
 
 ## Installation
@@ -49,7 +49,7 @@ If you find it valuable, feel free donate a little something to me here: [PayPal
 
 ## Usage
 
-1. **Enter your ElevenLabs API Key** - You need an API key with Scribe access from [elevenlabs.io/account](https://elevenlabs.io/account)
+1. **Enter your ElevenLabs API Key** - You need an API key with Scribe access from [elevenlabs.io/account](https://elevenlabs.io/app/settings/api-keys)
 
 2. **Configure Transcription Settings**:
    - Toggle speaker diarization on/off
