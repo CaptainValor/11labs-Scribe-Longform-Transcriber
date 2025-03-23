@@ -1,0 +1,92 @@
+<div class="panel">
+    <div class="panel-container">
+        <div class="stage-indicator">Step 1: Upload & Configure</div>
+        <div class="card">
+            <div class="form-group">
+                <div class="section-title">
+                    <h3 style="margin: 0;">Transcription Settings</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="section-content">
+                    <div class="form-group">
+                        <label for="apiKeyInput">ElevenLabs API Key</label>
+                        <input type="password" id="apiKeyInput" value="sk_4b941650458cd8495fc2ca43308c849fa355c90f43f57cf4" placeholder="Enter your API key">
+                        <p class="help-text">Used to access ElevenLabs services.</p>
+                    </div>
+                    
+                    <div class="toggle-container horizontal">
+                        <label for="diarizationToggle">Speaker Diarization</label>
+                        <div class="toggle-wrapper">
+                            <label class="toggle">
+                                <input type="checkbox" id="diarizationToggle" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <p class="help-text">Identifies different speakers.</p>
+                    
+                    <div id="speakerCountGroup">
+                        <div id="speakerCountContainer" class="form-group horizontal">
+                            <label for="numSpeakers">Number of Speakers (if known)</label>
+                            <select id="numSpeakers">
+                                <option value="">Auto-detect</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                                <option value="13">13</option>
+                                <option value="14">14</option>
+                                <option value="15">15</option>
+                                <option value="16">16</option>
+                                <option value="17">17</option>
+                                <option value="18">18</option>
+                                <option value="19">19</option>
+                                <option value="20">20</option>
+                                <option value="21">21</option>
+                                <option value="22">22</option>
+                                <option value="23">23</option>
+                                <option value="24">24</option>
+                                <option value="25">25</option>
+                                <option value="26">26</option>
+                                <option value="27">27</option>
+                                <option value="28">28</option>
+                                <option value="29">29</option>
+                                <option value="30">30</option>
+                            </select>
+                        </div>
+                        <p class="help-text">Can improve speaker identification accuracy.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <label class="file-upload" for="audioFile">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <span>Drop audio file here or click to browse</span>
+                <input type="file" id="audioFile" accept="audio/*">
+                <div class="file-name" id="fileName"></div>
+            </label>
+            
+            <button id="uploadBtn" class="btn" disabled>
+                <span>Transcribe</span>
+            </button>
+            
+            <!-- Progress Container -->
+            <div id="progressContainer" class="progress-container">
+                <h4 id="progressTitle">Transcribing your audio</h4>
+                <p class="status-text" id="statusText">Initializing...</p>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+                <p id="progressHelp" class="help-text">This may take a few minutes.</p>
+            </div>
+        </div>
+    </div>
+</div> 

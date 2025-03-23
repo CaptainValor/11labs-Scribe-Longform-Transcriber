@@ -1,0 +1,46 @@
+<div class="panel">
+    <div class="panel-container">
+        <div class="stage-indicator">Step 2: Label Speakers</div>
+        <div id="speakerLabelingContainer" class="card" style="display: none;">
+            <h3 class="stage-title">Customize Speaker Names</h3>
+            <p>Assign names to each speaker identified in the transcript:</p>
+            
+            <div id="speakersList" class="speakers-list">
+                <!-- Speaker items will be added here dynamically -->
+            </div>
+            
+            <button id="processSpeakersBtn" class="btn" style="margin-top: auto;">
+                <span>Process Transcript</span>
+            </button>
+            
+            <p class="help-text" style="text-align: center; margin-top: 0.75rem;">
+                You can update speaker labels and re-process at any time.
+            </p>
+        </div>
+        <div id="speakerProcessingContainer" class="card" style="display: none;">
+            <h3 class="stage-title">Processing Transcript</h3>
+            
+            <div class="processing-status">
+                <i class="fas fa-cogs"></i>
+                <h4>Merging Segments & Applying Labels</h4>
+                <div class="processing-animation">
+                    <div class="processing-dot"></div>
+                    <div class="processing-dot"></div>
+                    <div class="processing-dot"></div>
+                </div>
+                <p id="processingStatusText">Merging transcription segments...</p>
+                <div class="progress-bar-container" style="width: 80%; margin: 1rem auto;">
+                    <div class="progress-bar" id="processingProgressBar"></div>
+                </div>
+                <p class="help-text">This will take just a moment.</p>
+            </div>
+        </div>
+        <div id="placeholderLabelingContainer" class="card">
+            <div class="placeholder-content">
+                <i class="fas fa-tags"></i>
+                <h3>Speaker Labeling</h3>
+                <p>After transcription is complete, you'll be able to customize speaker names here.</p>
+            </div>
+        </div>
+    </div>
+</div> 

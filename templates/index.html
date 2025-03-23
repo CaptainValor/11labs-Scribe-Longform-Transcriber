@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elevenlabs Transcriber</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    {% include 'components/header.html' %}
+    
+    <div class="app-container">
+        {% include 'components/upload_panel.html' %}
+        {% include 'components/speaker_panel.html' %}
+        {% include 'components/transcript_panel.html' %}
+    </div>
+
+    <footer>
+        <p>Powered by ElevenLabs Scribe API • Handles files of any length by auto-splitting</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/audio-handler.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/ui-controller.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/transcript.js') }}"></script>
+</body>
+</html> 
