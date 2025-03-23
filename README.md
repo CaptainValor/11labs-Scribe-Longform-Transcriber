@@ -22,30 +22,52 @@ If you find it valuable, feel free donate a little something to me here: [PayPal
 
 ## Requirements
 
-- Python 3.7+
-- Flask
+- Python 3.7+ 
 - An ElevenLabs API key with Scribe access (obtain from [elevenlabs.io](https://elevenlabs.io/app/settings/api-keys))
-- Required Python libraries: See requirements below
+- **FFmpeg** (the only external dependency)
 
-## Installation
+### FFmpeg Installation
 
-1. Clone this repository:
+FFmpeg is required for audio processing. It's easy to install:
+
+- **Mac**: `brew install ffmpeg`
+- **Ubuntu/Debian**: `sudo apt-get install ffmpeg`
+- **Windows**: 
+  1. Download from [ffmpeg.org](https://ffmpeg.org/download.html)
+  2. Extract to a folder (e.g., `C:\ffmpeg`)
+  3. Add the bin folder to your PATH environment variable
+
+## Quick Start
+
+1. Make sure FFmpeg is installed (verify with `ffmpeg -version` in your terminal)
+
+2. Clone this repository:
    ```
    git clone https://github.com/yourusername/11labs-Scribe-Longform-Transcriber.git
    cd 11labs-Scribe-Longform-Transcriber
    ```
 
-2. Install the required dependencies:
+3. Install the required dependencies:
    ```
-   pip install flask pydub requests
+   pip install -r requirements.txt
    ```
 
-3. Run the application:
+4. Run the application:
    ```
    python app.py
    ```
 
-4. Open your browser and navigate to `http://localhost:5000`
+5. Open your browser and navigate to `http://localhost:5000`
+
+## Troubleshooting
+
+### FFmpeg Not Found
+
+If you see errors about FFmpeg not being found:
+
+1. **Verify FFmpeg is installed**: Run `ffmpeg -version` in your terminal
+2. **Check your PATH**: Make sure FFmpeg is in your system PATH
+3. **Reinstall if needed**: Follow the installation instructions above
 
 ## Usage
 

@@ -1,3 +1,5 @@
 flask==2.3.3
-pydub==0.25.1
-requests==2.31.0 
+requests==2.31.0
+ffmpeg-python==0.2.0
+
+# The only external dependency needed is FFmpeg, which must be installed on your system 

@@ -7,12 +7,45 @@ import traceback
 import json
 import time
 
-# Import modules
+# Import configuration
 from config import UPLOAD_FOLDER, MAX_CONTENT_LENGTH, SEGMENT_DURATION, OVERLAP_DURATION
-from modules.utils import save_uploaded_file, clean_up_file
-from modules.audio import split_audio
-from modules.transcription import transcribe_segment_with_requests, process_transcript_with_labels
-from modules.api import log_elevenlabs_endpoints, check_scribe_access, log_api_capabilities
+
+# Track import errors
+import_errors = []
+
+# Import modules with improved error handling
+try:
+    from modules.utils import save_uploaded_file, clean_up_file
+    utils_imported = True
+except ImportError as e:
+    error_msg = f"Error importing utils module: {e}"
+    import_errors.append(error_msg)
+    logging.error(error_msg)
+    print(f"Error: Could not import utils module. Make sure all requirements are installed.")
+    utils_imported = False
+
+# Import the FFmpeg-based audio module
+try:
+    from modules.audio import split_audio
+    audio_imported = True
+    print("Successfully imported FFmpeg-based audio module")
+except ImportError as e:
+    error_msg = f"Error importing audio module: {e}"
+    import_errors.append(error_msg)
+    logging.error(error_msg)
+    print(f"Failed to import audio module: {e}")
+    audio_imported = False
+
+try:
+    from modules.transcription import transcribe_segment_with_requests, process_transcript_with_labels
+    from modules.api import log_elevenlabs_endpoints, check_scribe_access, log_api_capabilities
+    api_imported = True
+except ImportError as e:
+    error_msg = f"Error importing transcription/API modules: {e}"
+    import_errors.append(error_msg)
+    logging.error(error_msg)
+    print(f"Error: Could not import transcription or API modules. Make sure all requirements are installed.")
+    api_imported = False
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -155,6 +188,46 @@ def ensure_logo_exists():
 # Routes
 @app.route('/')
 def index():
+    if import_errors:
+        error_html = """
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Dependency Error</title>
+            <style>
+                body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+                .error { background-color: #ffebee; padding: 15px; border-radius: 4px; margin-bottom: 15px; }
+                h1 { color: #d32f2f; }
+                pre { background-color: #f5f5f5; padding: 10px; border-radius: 4px; overflow-x: auto; }
+                .solution { background-color: #e8f5e9; padding: 15px; border-radius: 4px; margin-top: 20px; }
+                .command { background-color: #f5f5f5; padding: 8px; border-radius: 4px; display: inline-block; font-family: monospace; }
+            </style>
+        </head>
+        <body>
+            <h1>Dependency Error</h1>
+            <p>The application could not start because of the following issues:</p>
+            <div class="error">
+                <pre>%s</pre>
+            </div>
+            <div class="solution">
+                <h2>Solution</h2>
+                <p>This application requires FFmpeg to be installed on your system:</p>
+                <ol>
+                    <li><strong>Install FFmpeg</strong>:
+                        <ul>
+                            <li>Mac: <span class="command">brew install ffmpeg</span></li>
+                            <li>Ubuntu/Debian: <span class="command">sudo apt-get install ffmpeg</span></li>
+                            <li>Windows: Download from <a href="https://ffmpeg.org/download.html" target="_blank">ffmpeg.org</a> and add to your PATH</li>
+                        </ul>
+                    </li>
+                    <li><strong>Verify FFmpeg is working</strong>: Run <span class="command">ffmpeg -version</span> in your terminal</li>
+                    <li><strong>Install Python dependencies</strong>: <span class="command">pip install -r requirements.txt</span></li>
+                </ol>
+            </div>
+        </body>
+        </html>
+        """ % '\n'.join(import_errors)
+        return error_html
     return render_template('index.html')
 
 @app.route('/transcribe', methods=['POST'])
