@@ -177,19 +177,29 @@ async function pollProcessingProgress() {
                 // Add a cache-busting parameter to the URL
                 const finalResponse = await fetch('/final-transcript?t=' + new Date().getTime(), {
                     headers: {
-                        'Cache-Control': 'no-cache'
+                        'Cache-Control': 'no-cache',
+                        'Pragma': 'no-cache'
                     }
                 });
                 
+                if (!finalResponse.ok) {
+                    console.error('Final transcript API returned error:', finalResponse.status);
+                    return false;
+                }
+                
                 const finalData = await finalResponse.json();
+                
+                console.log('checkFinalTranscript response:', finalData);
                 
                 if (finalData.transcript && finalData.transcript.length > 0) {
                     // Log the received transcript for debugging
-                    console.log('Received final transcript:', finalData.transcript);
+                    console.log('Received final transcript with', finalData.transcript.length, 'entries');
                     
                     await finalizeProcessing(finalData);
                     return true;
                 }
+                
+                console.log('No transcript data in response.');
                 return false;
             } catch (error) {
                 console.error('Error checking final transcript:', error);
@@ -199,6 +209,22 @@ async function pollProcessingProgress() {
         
         // Finalize processing and update UI
         const finalizeProcessing = async (finalData) => {
+            // If no finalData was passed, try to fetch it
+            if (!finalData || !finalData.transcript) {
+                try {
+                    // Add a cache-busting parameter to the URL
+                    const response = await fetch('/final-transcript?t=' + new Date().getTime(), {
+                        headers: {
+                            'Cache-Control': 'no-cache'
+                        }
+                    });
+                    finalData = await response.json();
+                    console.log('Fetched final transcript in finalizeProcessing:', finalData);
+                } catch (error) {
+                    console.error('Error fetching final transcript in finalizeProcessing:', error);
+                }
+            }
+            
             // Clear the interval
             clearInterval(processingInterval);
             
@@ -226,9 +252,18 @@ async function pollProcessingProgress() {
                     
                     // Update the content
                     const resultDiv = document.getElementById('result');
-                    if (resultDiv) {
+                    if (resultDiv && finalData && finalData.transcript && finalData.transcript.length > 0) {
+                        // Log the final transcript being rendered
+                        console.log('Rendering final transcript:', finalData.transcript);
+                        
                         // Force a complete refresh of the content
                         resultDiv.innerHTML = formatTranscript(finalData.transcript);
+                    } else {
+                        console.error('Unable to update transcript: No valid transcript data');
+                        
+                        if (resultDiv) {
+                            resultDiv.innerHTML += '<p class="error-message">Error: No transcript data received from server.</p>';
+                        }
                     }
                     
                     // Make sure the result container is displayed
@@ -267,12 +302,47 @@ async function pollProcessingProgress() {
         
         // Poll for completion
         const pollUntilComplete = async () => {
-            // Check server status first, then fall back to checking final transcript
-            const isCompleteServer = await checkServerStatus();
-            if (!isCompleteServer) {
+            try {
+                // Check server status first
+                const isCompleteServer = await checkServerStatus();
+                console.log('Server status check - complete:', isCompleteServer);
+                
+                if (isCompleteServer) {
+                    return;
+                }
+                
+                // Then check for final transcript
                 const isCompleteTranscript = await checkFinalTranscript();
-                if (!isCompleteTranscript) {
-                    setTimeout(pollUntilComplete, 2000);
+                console.log('Final transcript check - complete:', isCompleteTranscript);
+                
+                if (isCompleteTranscript) {
+                    return;
+                }
+                
+                // Add a counter to track polling attempts
+                if (!window.pollAttempts) {
+                    window.pollAttempts = 0;
+                }
+                
+                window.pollAttempts++;
+                console.log(`Polling attempt ${window.pollAttempts}...`);
+                
+                // If we've been polling for a long time (over 60 seconds), try to finalize anyway
+                if (window.pollAttempts > 30) {
+                    console.log('Reached maximum polling attempts, forcing finalization...');
+                    await finalizeProcessing();
+                    return;
+                }
+                
+                // Continue polling
+                setTimeout(pollUntilComplete, 2000);
+            } catch (error) {
+                console.error('Error in pollUntilComplete:', error);
+                // If there's an error, try one more time to finalize with whatever data we have
+                try {
+                    await finalizeProcessing();
+                } catch (finalizeError) {
+                    console.error('Error in emergency finalization:', finalizeError);
                 }
             }
         };

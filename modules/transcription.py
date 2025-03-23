@@ -286,6 +286,9 @@ def merge_transcriptions(segments, speaker_labels, raw_segments=None):
 def process_transcript_with_labels(current_job, speaker_labels):
     """Process transcript with custom speaker labels."""
     try:
+        # Log the start of processing
+        logger.info(f"Starting transcript processing with speaker labels: {speaker_labels}")
+        
         # Initial status update
         current_job['status'] = "Merging transcription segments"
         current_job['processing_progress'] = 10
@@ -305,9 +308,12 @@ def process_transcript_with_labels(current_job, speaker_labels):
         all_segments = current_job.get('all_segments', [])
         
         if not all_segments:
+            logger.error("No transcript segments found in current_job")
             current_job['status'] = "Error: No transcript segments found"
             current_job['processing_complete'] = True
             return
+        
+        logger.info(f"Processing {len(all_segments)} segment(s)")
         
         current_job['status'] = "Applying speaker labels"
         current_job['processing_progress'] = 70
@@ -317,11 +323,18 @@ def process_transcript_with_labels(current_job, speaker_labels):
         raw_segments = current_job.get('raw_segments', [])
         final_transcript = merge_transcriptions(all_segments, speaker_labels, raw_segments)
         
+        # Log the final transcript for debugging
+        logger.info(f"Final transcript created with {len(final_transcript)} entries")
+        
         # Update job with final transcript
         current_job['final_transcript'] = final_transcript
         current_job['status'] = "Processing complete"
         current_job['processing_progress'] = 100
         current_job['processing_complete'] = True
+        
+        # Log completion 
+        logger.info("Transcript processing complete")
+        logger.debug(f"Final transcript: {final_transcript}")
         
     except Exception as e:
         error_details = traceback.format_exc()

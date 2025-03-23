@@ -341,7 +341,26 @@ def processing_progress():
 @app.route('/final-transcript', methods=['GET'])
 def get_final_transcript():
     final_transcript = current_job.get('final_transcript', [])
+    
+    # Add debug logging
+    logger.info(f"Returning final transcript with {len(final_transcript)} entries")
+    if len(final_transcript) > 0:
+        logger.debug(f"Sample entry: {final_transcript[0]}")
+    
     return jsonify({'transcript': final_transcript})
+
+@app.route('/debug-transcript', methods=['GET'])
+def debug_transcript():
+    """Debug endpoint to show the current state of transcript processing."""
+    return jsonify({
+        'job_status': current_job.get('status', 'Unknown'),
+        'processing_complete': current_job.get('processing_complete', False),
+        'processing_progress': current_job.get('processing_progress', 0),
+        'final_transcript_count': len(current_job.get('final_transcript', [])),
+        'transcript_sample': current_job.get('final_transcript', [])[:2],
+        'has_first_segment': 'first_segment' in current_job,
+        'has_all_segments': 'all_segments' in current_job
+    })
 
 @app.route('/logo')
 def logo():
