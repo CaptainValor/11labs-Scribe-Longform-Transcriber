@@ -1,14 +1,14 @@
-# 11labs Scribe Longform Transcriber
+# ElevenLabs Scribe Longform Transcriber
 
 A web application that transcribes long-form audio files using the ElevenLabs Scribe API. It automatically splits audio files into segments, transcribes each segment, and combines the transcripts with speaker detection.
 
 ## Disclaimer
 
-This tool is intended to be run locally on your own machine. It was originally created by Stephen Torrence on a Mac using Cursor and Claude. 
+This tool is intended to be run locally on your own machine. It was originally created by me (Stephen Torrence) on a Mac using Cursor and Claude. 
 
 **No support or warranty is provided** - I'm sharing this publicly for anyone who might find it valuable, but cannot offer technical support or guarantee its functionality in all environments.
 
-![ElevenLabs Scribe Transcriber](https://elevenlabs.io/images/logo.png)
+If you find it valuable, feel free donate a little something to me here: [PayPal](https://www.paypal.com/paypalme/ecotexan) [Venmo](https://account.venmo.com/u/stephen-torrence-1)
 
 ## Features
 
